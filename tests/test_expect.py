@@ -1,56 +1,32 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
+from page_objects.AdminPage import AdminPage
+from page_objects.HomePage import HomePage
+from page_objects.RegisterPage import RegisterPage
 
 
-def test_register(driver, base_url):
-    driver.get(base_url + "/index.php?route=account/register")
-    wait = WebDriverWait(driver, 1)
-    wait.until(EC.visibility_of_element_located((By.ID, "input-firstname")))
-    wait.until(EC.visibility_of_element_located((By.NAME, "newsletter")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input.btn.btn-primary")))
-    wait.until(EC.invisibility_of_element_located((By.NAME, "customer_group_id")))
-    wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="content"]/form/div/div/a'))).click()
-    wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div.modal-body > p"), "Privacy Policy"))
+def test_admin_add_product(driver, base_url):
+    AdminPage(driver, base_url) \
+        .redirect().login("demo", "demo") \
+        .redirect_to_add_product() \
+        .create_product("Phone", "IPhone")
 
 
-def test_admin(driver, base_url):
-    driver.get(base_url + "/admin/")
-    wait = WebDriverWait(driver, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.panel-heading > h1 > i")))
-    wait.until(EC.text_to_be_present_in_element((By.ID, "content"), " Введите логин и пароль"))
-    wait.until(EC.visibility_of_element_located((By.ID, "input-username")))
-    wait.until(EC.visibility_of_element_located((By.NAME, "password")))
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div.text-right > button")))
+def test_admin_delete_product(driver, base_url):
+    AdminPage(driver, base_url) \
+        .redirect() \
+        .login("demo", "demo"). \
+        delete_product()
 
 
-def test_product(driver, base_url):
-    driver.get(base_url + "/index.php?route=product/product&path=20&product_id=40")
-    wait = WebDriverWait(driver, 1)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "li:nth-child(1) > a > img")))
-    wait.until(EC.visibility_of_element_located((By.ID, "button-cart")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.btn-group > button:nth-child(1)")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "ul.nav.nav-tabs > li:nth-child(2) > a")))
-    wait.until(EC.visibility_of_element_located((By.NAME, "quantity")))
+def test_registration_user(driver, base_url):
+    RegisterPage(driver, base_url) \
+        .move_to_registration_form() \
+        .registration_user(
+            "TestUser123456",
+            "TestUser654321",
+            "testmail35745645@mail.ru",
+            "+79990000000",
+            "testuser111")
 
 
-def test_catalog(driver, base_url):
-    driver.get(base_url + "/index.php?route=product/category&path=20")
-    wait = WebDriverWait(driver, 1)
-    wait.until(EC.title_is("Desktops"))
-    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "list-group")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.col-md-4.col-xs-6 > div > label")))
-    wait.until(EC.visibility_of_element_located((By.ID, "input-sort")))
-    wait.until(EC.visibility_of_element_located((By.ID, "list-view")))
-
-
-def test_home(driver, base_url):
-    driver.get(base_url)
-    wait = WebDriverWait(driver, 1)
-    wait.until(EC.title_is("Your Store"))
-    wait.until(EC.visibility_of_element_located((By.NAME, "search")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#search > span > button")))
-    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#cart > button")))
-    wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "#cart > button"), "Товаров 0 (0.00руб.)"))
-
+def test_switch_currency(driver, base_url):
+    HomePage(driver, base_url).switch_currency("RUB")

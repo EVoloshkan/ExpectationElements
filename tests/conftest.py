@@ -36,6 +36,8 @@ def driver(request):
     else:
         raise ValueError(f"Incorrect driver {str_driver}")
 
+    driver.maximize_window()
+
     yield driver
 
     driver.close()
