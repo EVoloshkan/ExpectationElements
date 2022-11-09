@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 from page_objects.BasePage import BasePage
@@ -13,6 +14,10 @@ class HomePage(BasePage):
     def switch_currency(self, currency):
         self.driver.get(self.base_url)
         self.click(self.element(self.CURRENCY_MENU))
+
+        with allure.step(f"Валюта {currency}"):
+            pass
+
         if currency == "EUR":
             self.click(self.element(self.EUR_CURRENCY))
         elif currency == "GBP":
@@ -22,5 +27,6 @@ class HomePage(BasePage):
         elif currency == "RUB":
             self.click(self.element(self.RUB_CURRENCY))
         else:
+            self.logger.error(f"Currency not found: {currency}")
             raise ValueError(f"Неизвестная валюта {currency}")
         return self

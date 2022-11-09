@@ -1,3 +1,4 @@
+import logging
 import os.path
 
 import pytest
@@ -37,6 +38,8 @@ def driver(request):
         raise ValueError(f"Incorrect driver {str_driver}")
 
     driver.maximize_window()
+    driver.log_level = logging.DEBUG
+    driver.test_name = request.node.name
 
     yield driver
 
