@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from page_objects.BasePage import BasePage
 
 
-class Admin1Page(BasePage):
+class AdminPage(BasePage):
     PATH = "/admin"
     LOGIN_INPUT = (By.CSS_SELECTOR, "#input-username")
     PASSWORD_INPUT = (By.CSS_SELECTOR, "#input-password")

@@ -10,9 +10,9 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class BasePage:
 
-    def __init__(self, driver, base_url):
+    def __init__(self, driver):
         self.driver = driver
-        self.base_url = base_url
+        self.base_url = driver.base_url
         self.__config_logger()
 
     def __config_logger(self, to_file=True):
@@ -71,5 +71,3 @@ class BasePage:
         except TimeoutException:
             self.logger.error(f"Timeout Exception: {locator}")
             raise AssertionError(f"Не дождался видимости элементов {locator}")
-
-
