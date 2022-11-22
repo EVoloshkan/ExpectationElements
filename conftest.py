@@ -1,4 +1,3 @@
-import logging
 import os
 import pytest
 from selenium import webdriver
@@ -9,7 +8,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--driver_path", action="store", default="")
     parser.addoption("--log_level", default="ERROR")
-    parser.addoption("--executor", action="store", default="192.168.1.64")
+    parser.addoption("--executor", action="store", default="192.168.1.70")
     parser.addoption("--mobile", action="store_true")
     parser.addoption("--vnc", action="store_true")
     parser.addoption("--logs", action="store_true")
