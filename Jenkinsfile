@@ -1,39 +1,28 @@
 pipeline {
-  agent any
-  stages {
-     stage("Build image") {
-        steps {
-    	catchError {
-      	   script {
-        	      docker.build("page_object2", "-f Dockerfile .")
-      	     }
-          }
+  agent {
+      docker {
+          image 'python:3' }
        }
+  stages {
+         stage('Get Code') {
+            steps {
+                 git 'https://github.com/agridyaev/otus-allure/'
+            }
+         }
+    stage('build') {
+      steps {
+        sh 'pip install --user -r requirements.txt'
+      }
     }
-     stage('Run tests') {
-        steps {
-           catchError {
-              script {
-          	     docker.image('aerokube/selenoid:1.10.8').withRun('-p 4444:4444 -v /run/docker.sock:/var/run/docker.sock -v $PWD:/etc/selenoid/',
-            	'-timeout 600s -limit 2') { c ->
-              	docker.image('page_object2').inside("--link ${c.id}:selenoid") {
-                    	sh "pytest -n 2 --reruns 1 ${CMD_PARAMS}"
-                	    }
-                   }
-        	     }
-      	    }
-         }
-     }
-     stage('Reports') {
-        steps {
-           allure([
-      	   includeProperties: false,
-      	   jdk: '',
-      	   properties: [],
-      	   reportBuildPolicy: 'ALWAYS',
-      	   results: [[path: 'allure-results/']]
-    	   ])
-  	        }
-         }
-     }
+    stage('test') {
+      steps {
+        sh 'python3 -m pytest --junitxml=./test-reports/report.xml ./tests'
+      }
+      post {
+        always {
+          junit 'test-reports/*.xml'
+        }
+      }
+    }
+  }
 }
