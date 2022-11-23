@@ -5,27 +5,18 @@ pipeline {
         steps {
     	catchError {
       	   script {
-        	      docker.build("python-web-tests", "-f Dockerfile .")
+        	      docker.build("page_object2", "-f Dockerfile .")
       	     }
           }
        }
     }
-     stage('Pull browser') {
-        steps {
-           catchError {
-              script {
-      	    docker.image('selenoid/chrome:105.0')
-      	      }
-           }
-        }
-     }
      stage('Run tests') {
         steps {
            catchError {
               script {
           	     docker.image('aerokube/selenoid:1.10.8').withRun('-p 4444:4444 -v /run/docker.sock:/var/run/docker.sock -v $PWD:/etc/selenoid/',
             	'-timeout 600s -limit 2') { c ->
-              	docker.image('python-web-tests').inside("--link ${c.id}:selenoid") {
+              	docker.image('page_object2').inside("--link ${c.id}:selenoid") {
                     	sh "pytest -n 2 --reruns 1 ${CMD_PARAMS}"
                 	    }
                    }
