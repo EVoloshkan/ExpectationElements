@@ -15,17 +15,17 @@ pipeline {
           junit 'test-reports/*.xml'
         }
       }
-    }
-    stage('Reports') {
-        steps {
-           allure([
+      post {
+        always {
+          allure([
       	   includeProperties: false,
       	   jdk: '',
       	   properties: [],
       	   reportBuildPolicy: 'ALWAYS',
       	   results: [[path: 'allure-results']]
     	   ])
-  	        }
-         }
+        }
+      }
+    }
   }
 }
