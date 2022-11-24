@@ -1,5 +1,5 @@
 pipeline {
-  agent {
+  stages {
     stage('build') {
       steps {
         sh 'pip install --user -r requirements.txt'
