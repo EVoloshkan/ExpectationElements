@@ -1,8 +1,6 @@
 pipeline {
   agent {
-      docker {
-          args '-e "HOME=/home/vagrant/jenkins/workspace/testjobs/dockerexample"'
-          image 'python:slim' }
+
        }
   stages {
          stage('Get Code') {
