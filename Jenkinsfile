@@ -1,14 +1,5 @@
 pipeline {
   agent {
-      docker {
-          image 'python:3' }
-       }
-  stages {
-         stage('Get Code') {
-            steps {
-                 git 'https://github.com/agridyaev/otus-allure/'
-            }
-         }
     stage('build') {
       steps {
         sh 'pip install --user -r requirements.txt'
