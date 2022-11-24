@@ -8,7 +8,8 @@ pipeline {
     }
     stage('test') {
       steps {
-        sh 'python3 -m pytest --junitxml=./test-reports/report.xml ./tests'
+        sh 'python3 -m pytest --url=${url} --browser=${browser} --executor=${executor} --bv=${bv}
+        --junitxml=./test-reports/report.xml ./tests'
       }
       post {
         always {
